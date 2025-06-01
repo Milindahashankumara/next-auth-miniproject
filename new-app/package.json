@@ -21,6 +21,7 @@
     "@mantine/nprogress": "^8.0.2",
     "@mantine/spotlight": "^8.0.2",
     "@tabler/icons": "^3.33.0",
+    "@tabler/icons-react": "^3.33.0",
     "dayjs": "^1.11.13",
     "iron-session": "^8.0.4",
     "next": "15.3.3",
