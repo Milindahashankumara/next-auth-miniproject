@@ -3,9 +3,10 @@
 import '@mantine/core/styles.css';
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { AuthProvider } from '@/components/AuthContext';
 
 export const metadata = {
-  title: 'My Mantine app',
+  title: 'My Next app',
   description: 'I have followed setup instructions carefully',
 };
 
@@ -20,7 +21,13 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider>
+          <AuthProvider>
+            <div>
+              <div className='content'>{children}</div>
+            </div>
+          </AuthProvider>
+        </MantineProvider>
       </body>
     </html>
   );

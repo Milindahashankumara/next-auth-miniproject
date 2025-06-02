@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react';
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import classes from './DoubleNavbar.module.css';
-import { useAuth } from './AuthContext';
+import { useAuth } from '@/components/AuthContext';
 
 //reuse the interface in multiple components or places
 interface NavbarLinkProps {
