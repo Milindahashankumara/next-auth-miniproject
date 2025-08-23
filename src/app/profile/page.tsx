@@ -11,6 +11,7 @@ import {
   Avatar,
   Divider,
   Card,
+  Box,
   Grid
 } from '@mantine/core';
 import { IconUser, IconMail, IconCrown, IconCalendar } from '@tabler/icons-react';
@@ -94,20 +95,20 @@ function ProfilePage() {
                     <Title order={4} mb="md">Account Statistics</Title>
                     <Grid>
                       <Grid.Col span={6}>
-                        <Text ta="center">
+                        <Box ta="center">
                           <Title order={3} c="blue">12</Title>
                           <Text size="sm" c="dimmed">Images Viewed</Text>
-                        </Text>
+                        </Box>
                       </Grid.Col>
                       <Grid.Col span={6}>
-                        <Text ta="center">
+                        <Box ta="center">
                           <Title order={3} c="green">
                             {user?.isPremium ? '∞' : '5'}
                           </Title>
-                          <Text size="sm" c="dimmed">
+                          <Box size="sm" c="dimmed">
                             {user?.isPremium ? 'Unlimited Access' : 'Views Remaining'}
-                          </Text>
-                        </Text>
+                          </Box>
+                        </Box>
                       </Grid.Col>
                     </Grid>
                   </Card>
