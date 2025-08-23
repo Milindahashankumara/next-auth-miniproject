@@ -26,7 +26,7 @@
     "dayjs": "^1.11.13",
     "iron-session": "^8.0.4",
     "jsonwebtoken": "^9.0.2",
-    "next": "15.3.3",
+    "next": "^15.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^2.15.3"

@@ -1,74 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-// Same user store as login
-const users = [
-  {
-    id: '1',
-    email: 'user@example.com',
-    password: 'password123',
-    name: 'John Doe',
-    isPremium: false,
-  },
-  {
-    id: '2',
-    email: 'premium@example.com',
-    password: 'premium123',
-    name: 'Jane Smith',
-    isPremium: true,
-  },
-  {
-    id: '3',
-    email: 'admin@example.com',
-    password: 'admin123',
-    name: 'Admin User',
-    isPremium: true,
-  },
-];
+import { verifyJwtToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get('auth-token');
-
-    if (!authToken) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
-    }
-
-    // Decode session token
-    const sessionData = JSON.parse(atob(authToken.value));
+    // Get token from cookies
+const cookieStore = await cookies();
+const token = (cookieStore as any).get('auth-token')?.value;
     
-    // Check if token is expired (7 days)
-    const tokenAge = Date.now() - sessionData.timestamp;
-    if (tokenAge > 7 * 24 * 60 * 60 * 1000) {
+    if (!token) {
       return NextResponse.json(
-        { error: 'Token expired' },
+        { error: 'Unauthorized' },
         { status: 401 }
       );
     }
-
-    // Find user
-    const user = users.find(u => u.id === sessionData.userId);
-
-    if (!user) {
+    
+    // Verify and decode JWT token
+    const payload = verifyJwtToken(token);
+    
+    if (!payload) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
+        { error: 'Invalid token' },
+        { status: 401 }
       );
     }
-
-    // Return user data (without password)
-    const { password: _, ...userWithoutPassword } = user;
-    return NextResponse.json(userWithoutPassword);
-
+    
+    // Return user data from the token payload
+    return NextResponse.json({
+      id: payload.id,
+      email: payload.email,
+      name: payload.name,
+      isPremium: payload.isPremium
+    });
   } catch (error) {
     console.error('Auth check error:', error);
     return NextResponse.json(
-      { error: 'Invalid token' },
-      { status: 401 }
+      { error: 'Internal server error' },
+      { status: 500 }
     );
   }
 }

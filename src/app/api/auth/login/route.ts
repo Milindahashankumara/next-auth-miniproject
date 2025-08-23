@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { signJwtToken } from '@/utils/jwt';
+
 
 // Simple in-memory user store for demo
 const users = [
@@ -48,26 +50,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create session token (in production, use proper JWT)
-    const sessionToken = btoa(JSON.stringify({ 
-      userId: user.id, 
+    // Create user object without password
+    const userWithoutPassword = {
+      id: user.id,
       email: user.email,
-      timestamp: Date.now() 
-    }));
+      name: user.name,
+      isPremium: user.isPremium
+    };
 
-    // Set cookie
+    // Generate JWT token
+    const token = signJwtToken(userWithoutPassword);
+
+    // Set JWT token in HTTP-only cookie
     const cookieStore = await cookies();
-    cookieStore.set('auth-token', sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
+(cookieStore as any).set('auth-token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 60 * 60 * 24 * 7, // 7 days
+  path: '/'
+});
 
-    // Return user data (without password)
-    const { password: _, ...userWithoutPassword } = user;
     return NextResponse.json(userWithoutPassword);
-
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
