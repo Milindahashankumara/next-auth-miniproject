@@ -38,14 +38,13 @@ const sampleImages = [
     description: 'Mystical forest path with morning light',
     isPremium: true,
   },
-  {
+{
   id: 4,
   title: 'City Skyline',
-  url: 'https://images.unsplash.com/photo-1508923567004-3a6b8004f3d3?auto=format&fit=crop&w=400&h=300',
+  url: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=400&h=300&fit=crop',
   description: 'Modern city skyline at night',
-  isPremium: false,
-
-  },
+  isPremium: false
+},
   {
     id: 5,
     title: 'Aurora Borealis',
