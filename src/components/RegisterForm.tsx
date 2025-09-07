@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import validator from 'validator';
 import {
   TextInput,
   PasswordInput,
@@ -25,9 +26,13 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setMessage('');
+    if (!validator.isEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    setLoading(true);
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -65,6 +70,7 @@ export default function RegisterForm() {
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
+            {error && <div style={{ color: 'red', marginTop: '4px' }}>{error}</div>}
             <PasswordInput
               label="Password"
               placeholder="Your password"

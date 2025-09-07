@@ -9,6 +9,7 @@ import {
   IconLogin2,
   IconUser,
   IconPhoto,
+  IconUserPlus,
 } from '@tabler/icons-react';
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import classes from './DoubleNavbar.module.css';
@@ -82,6 +83,7 @@ export default function DoubleNavbar() {
       return [
         ...baseItems,
         { icon: IconLogin2, label: 'Login', href: '/login' },
+           { icon: IconUserPlus, label: 'Register', href: '/register' },
       ];
     }
   };
