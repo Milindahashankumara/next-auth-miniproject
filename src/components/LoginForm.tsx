@@ -72,15 +72,6 @@ export default function LoginForm() {
             </Button>
           </Stack>
         </form>
-        
-        <Paper mt={20} p={10} bg="gray.0">
-          <Title order={6} mb={5}>Demo Accounts:</Title>
-          <div style={{ fontSize: '12px' }}>
-            <div><strong>Regular User:</strong> user@example.com / password123</div>
-            <div><strong>Premium User:</strong> premium@example.com / premium123</div>
-            <div><strong>Admin User:</strong> admin@example.com / admin123</div>
-          </div>
-        </Paper>
       </Paper>
     </Container>
   );
