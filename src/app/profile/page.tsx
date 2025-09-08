@@ -83,7 +83,11 @@ function ProfilePage() {
                         <IconCalendar size={16} />
                         <div>
                           <Text size="sm" fw={500}>Member Since</Text>
-                          <Text size="sm" c="dimmed">January 2024</Text>
+                          <Text size="sm" c="dimmed">
+                            {user?.createdAt && !isNaN(Date.parse(user.createdAt))
+                              ? new Date(user.createdAt).toLocaleDateString()
+                              : ''}
+                          </Text>
                         </div>
                       </Group>
                     </Stack>

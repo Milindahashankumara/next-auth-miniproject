@@ -32,7 +32,8 @@ export async function POST(request: NextRequest) {
   id: user._id.toString(), // Convert ObjectId to string
   email: user.email,
   name: user.name || '',
-  isPremium: user.isPremium || false
+  isPremium: user.isPremium || false,
+  createdAt: user.createdAt // Ensure createdAt is included
 };
 
     // Generate JWT token

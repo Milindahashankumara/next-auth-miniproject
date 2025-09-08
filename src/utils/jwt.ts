@@ -4,12 +4,13 @@ export const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-p
 export const JWT_EXPIRES_IN = '1h';
 
 export interface jwtPayload {
-    id: string;
+  id: string;
   email: string;
   name: string;
   isPremium: boolean;
-  iat?: number; // Issued at
-  exp?: number; // Expiration time
+  createdAt?: string; 
+  iat?: number;
+  exp?: number;
 }
 
 //Generate JWT token

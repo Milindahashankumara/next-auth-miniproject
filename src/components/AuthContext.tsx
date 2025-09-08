@@ -6,6 +6,7 @@ interface User {
   email: string;
   name: string;
   isPremium: boolean;
+  createdAt?: string;
 }
 
 interface AuthContextType {

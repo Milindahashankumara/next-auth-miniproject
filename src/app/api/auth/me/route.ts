@@ -34,12 +34,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Return user data from the token payload
-    return NextResponse.json({
+        return NextResponse.json({
       id: payload.id,
       email: payload.email,
       name: payload.name,
-      isPremium: payload.isPremium
-    });
+      isPremium: payload.isPremium,
+      createdAt: payload.createdAt 
+});
   } catch (error) {
     console.error('Auth check error:', error);
     return NextResponse.json(
