@@ -13,7 +13,13 @@ export async function POST(request: NextRequest) {
   }
 
   // Store user (hash password in production!)
-  await db.collection('users').insertOne({ email, password, isPremium: !!isPremium });
+  const createdAt = new Date();
+  await db.collection('users').insertOne({
+    email,
+    password,
+    isPremium: !!isPremium,
+    createdAt
+  });
 
-  return NextResponse.json({ message: 'Registration successful!' });
+  return NextResponse.json({ message: 'Registration successful!', createdAt });
 }
