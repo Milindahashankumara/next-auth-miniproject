@@ -2,7 +2,7 @@ import { NextResponse , NextRequest } from 'next/server';
 import clientPromise from '@/utils/mongodb';
 
 export async function POST(request: NextRequest) {
-  const { email, password, isPremium } = await request.json();
+  const { email, password, isPremium, name } = await request.json();
   const client = await clientPromise;
   const db = client.db();
 
@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     email,
     password,
     isPremium: !!isPremium,
+    name,
     createdAt
   });
 

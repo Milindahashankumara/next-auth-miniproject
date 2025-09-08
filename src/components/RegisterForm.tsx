@@ -22,6 +22,7 @@ export default function RegisterForm() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,7 +37,7 @@ export default function RegisterForm() {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, isPremium }),
+  body: JSON.stringify({ email, password, isPremium, name }),
     });
     const data = await res.json();
     setLoading(false);
@@ -63,6 +64,13 @@ export default function RegisterForm() {
                 {message}
               </Alert>
             )}
+            <TextInput
+                label="Full Name"
+                placeholder="Enter your name"
+                required
+                value={name}
+                onChange={e => setName(e.currentTarget.value)}
+              />
             <TextInput
               label="Email"
               placeholder="your@email.com"

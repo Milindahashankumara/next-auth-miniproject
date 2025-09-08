@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   email: user.email,
   name: user.name || '',
   isPremium: user.isPremium || false,
-  createdAt: user.createdAt // Ensure createdAt is included
+  createdAt: user.createdAt 
 };
 
     // Generate JWT token
