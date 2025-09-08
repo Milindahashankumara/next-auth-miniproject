@@ -28,18 +28,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const checkAuth = async () => {
-    try {
-      const response = await fetch('/api/auth/me');
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-    } finally {
-      setLoading(false);
+  try {
+  const token = localStorage.getItem('token');
+const response = await fetch('/api/auth/me', {
+  headers: {
+    Authorization: token ? `Bearer ${token}` : '',
+  },
+});
+    if (response.ok) {
+      const userData = await response.json();
+      setUser(userData);
     }
-  };
+  } catch (error) {
+    console.error('Auth check failed:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
@@ -52,7 +57,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (response.ok) {
-        const userData = await response.json();
+        const { token, ...userData } = await response.json();
+        if (token) {
+          localStorage.setItem('token', token);
+        }
         setUser(userData);
         return true;
       }
@@ -69,6 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
+      localStorage.removeItem('token');
       setUser(null);
     }
   };
