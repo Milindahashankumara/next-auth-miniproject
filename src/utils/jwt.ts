@@ -22,8 +22,11 @@ export function signJwtToken(payload: Omit<jwtPayload, 'iat' | 'exp'>): string {
 export function verifyJwtToken(token: string): jwtPayload | null {
   try {
     return jwt.verify(token, JWT_SECRET) as jwtPayload;
-  } catch (error) {
-    console.error('JWT verification failed:', error);
+  } catch (error: any) {
+    // Don't log errors for expired tokens (expected behavior)
+    if (error?.name !== 'TokenExpiredError' && error?.name !== 'JsonWebTokenError') {
+      console.error('JWT verification failed:', error);
+    }
     return null;
   }
 }

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { signJwtToken } from '@/utils/jwt';
 import clientPromise from '@/utils/mongodb';
 
@@ -39,16 +38,19 @@ export async function POST(request: NextRequest) {
     // Generate JWT token
     const token = signJwtToken(userWithoutPassword);
 
+    // Create response with user data
+    const response = NextResponse.json({ token, ...userWithoutPassword });
+
     // Set JWT token in HTTP-only cookie
-    const cookieStore = cookies();
-    (cookieStore as any).set('auth-token', token, {
+    response.cookies.set('auth-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/'
     });
-  return NextResponse.json({ token, ...userWithoutPassword });
+
+    return response;
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(

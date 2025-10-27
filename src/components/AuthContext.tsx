@@ -31,17 +31,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuth = async () => {
   try {
   const token = localStorage.getItem('token');
+  if (!token) {
+    setLoading(false);
+    return;
+  }
+
 const response = await fetch('/api/auth/me', {
   headers: {
-    Authorization: token ? `Bearer ${token}` : '',
+    Authorization: `Bearer ${token}`,
   },
 });
     if (response.ok) {
       const userData = await response.json();
       setUser(userData);
+    } else if (response.status === 401) {
+      // Token expired or invalid - clear it
+      localStorage.removeItem('token');
+      setUser(null);
     }
   } catch (error) {
     console.error('Auth check failed:', error);
+    localStorage.removeItem('token');
   } finally {
     setLoading(false);
   }

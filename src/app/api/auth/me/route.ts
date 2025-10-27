@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { verifyJwtToken } from '@/utils/jwt';
 
 export async function GET(request: NextRequest) {
@@ -11,9 +10,8 @@ export async function GET(request: NextRequest) {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     } else {
-  // Fallback: get token from cookies (await required)
-  const cookieStore = await cookies();
-  token = (cookieStore as any).get('auth-token')?.value;
+      // Fallback: get token from cookies
+      token = request.cookies.get('auth-token')?.value;
     }
 
     if (!token) {
