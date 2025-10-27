@@ -5,14 +5,13 @@ export async function POST(request: NextRequest) {
     // Create response
     const response = NextResponse.json({ success: true });
     
-    // Clear the auth token cookie
-    response.cookies.set('auth-token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      expires: new Date(0), // Set expiration to the past
-      sameSite: 'strict',
-      path: '/'
-    });
+    // Clear the auth token cookie by setting it to expire
+    const expiredDate = new Date(0).toUTCString();
+    const cookieValue = `auth-token=; HttpOnly; Path=/; Expires=${expiredDate}; ${
+      process.env.NODE_ENV === 'production' ? 'Secure; ' : ''
+    }SameSite=Strict`;
+    
+    response.headers.set('Set-Cookie', cookieValue);
     
     return response;
   } catch (error) {

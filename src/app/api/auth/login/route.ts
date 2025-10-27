@@ -42,13 +42,11 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({ token, ...userWithoutPassword });
 
     // Set JWT token in HTTP-only cookie
-    response.cookies.set('auth-token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/'
-    });
+    const cookieValue = `auth-token=${token}; HttpOnly; Path=/; Max-Age=604800; ${
+      process.env.NODE_ENV === 'production' ? 'Secure; ' : ''
+    }SameSite=Strict`;
+    
+    response.headers.set('Set-Cookie', cookieValue);
 
     return response;
   } catch (error) {
