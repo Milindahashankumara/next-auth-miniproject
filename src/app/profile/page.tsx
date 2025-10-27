@@ -109,9 +109,9 @@ function ProfilePage() {
                           <Title order={3} c="green">
                             {user?.isPremium ? '∞' : '5'}
                           </Title>
-                          <Box size="sm" c="dimmed">
+                          <Text size="sm" c="dimmed">
                             {user?.isPremium ? 'Unlimited Access' : 'Views Remaining'}
-                          </Box>
+                          </Text>
                         </Box>
                       </Grid.Col>
                     </Grid>

@@ -110,7 +110,7 @@ function Homepage() {
                 </Card>
               </>
             ) : (
-              <Card shadow="sm" padding="lg" radius="md" withBorder span={2}>
+              <Card shadow="sm" padding="lg" radius="md" withBorder>
                 <Group justify="center" mb="md">
                   <IconUser size={48} color="blue" />
                 </Group>
