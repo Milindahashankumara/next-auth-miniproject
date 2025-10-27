@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     // Create response
@@ -7,9 +9,9 @@ export async function POST(request: NextRequest) {
     
     // Clear the auth token cookie by setting it to expire
     const expiredDate = new Date(0).toUTCString();
-    const cookieValue = `auth-token=; HttpOnly; Path=/; Expires=${expiredDate}; ${
-      process.env.NODE_ENV === 'production' ? 'Secure; ' : ''
-    }SameSite=Strict`;
+    const isProduction = process.env.NODE_ENV === 'production';
+    const secureFlag = isProduction ? 'Secure; ' : '';
+    const cookieValue = `auth-token=; HttpOnly; Path=/; Expires=${expiredDate}; ${secureFlag}SameSite=Strict`;
     
     response.headers.set('Set-Cookie', cookieValue);
     

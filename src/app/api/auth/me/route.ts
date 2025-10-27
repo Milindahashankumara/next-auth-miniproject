@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyJwtToken } from '@/utils/jwt';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Try to get token from Authorization header
     const authHeader = request.headers.get('authorization');
     let token = null;
 
-    if (authHeader && authHeader.startsWith('Bearer ')) {
+    if (authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     } else {
       // Fallback: get token from cookies

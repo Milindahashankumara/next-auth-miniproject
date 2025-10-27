@@ -1,6 +1,8 @@
 import { NextResponse , NextRequest} from 'next/server';
 import clientPromise from '@/utils/mongodb';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   const { title, description, owner } = await request.json();
   const client = await clientPromise;

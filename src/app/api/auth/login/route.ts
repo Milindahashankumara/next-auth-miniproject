@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { signJwtToken } from '@/utils/jwt';
 import clientPromise from '@/utils/mongodb';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
@@ -42,9 +44,9 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({ token, ...userWithoutPassword });
 
     // Set JWT token in HTTP-only cookie
-    const cookieValue = `auth-token=${token}; HttpOnly; Path=/; Max-Age=604800; ${
-      process.env.NODE_ENV === 'production' ? 'Secure; ' : ''
-    }SameSite=Strict`;
+    const isProduction = process.env.NODE_ENV === 'production';
+    const secureFlag = isProduction ? 'Secure; ' : '';
+    const cookieValue = `auth-token=${token}; HttpOnly; Path=/; Max-Age=604800; ${secureFlag}SameSite=Strict`;
     
     response.headers.set('Set-Cookie', cookieValue);
 
