@@ -10,10 +10,15 @@ const PREMIUM_PATHS = ['/premium'];
 export function middleware(request: NextRequest) {
   // Get token from cookies
   const token = request.cookies.get('auth-token')?.value;
-  const path = request.nextUrl.pathname;
-  
+
+  // Safe pathname: request.nextUrl may be undefined in some runtime contexts,
+  // fall back to parsing request.url. Ensure we always have a string before calling startsWith.
+  const path = typeof request.nextUrl?.pathname === 'string'
+    ? request.nextUrl.pathname
+    : (request.url ? new URL(request.url).pathname : '/');
+
   // Check if the path requires authentication
-  if (PROTECTED_PATHS.some(prefix => path.startsWith(prefix))) {
+  if (PROTECTED_PATHS.some(prefix => typeof path === 'string' && path.startsWith(prefix))) {
     // No token - redirect to login
     if (!token) {
       const url = new URL('/login', request.url);
@@ -30,7 +35,7 @@ export function middleware(request: NextRequest) {
     }
     
     // Check premium access for premium paths
-    if (PREMIUM_PATHS.some(prefix => path.startsWith(prefix)) && !payload.isPremium) {
+    if (PREMIUM_PATHS.some(prefix => typeof path === 'string' && path.startsWith(prefix)) && !payload.isPremium) {
       return NextResponse.redirect(new URL('/profile', request.url));
     }
   }
