@@ -11,11 +11,6 @@ declare global {
 let client;
 let clientPromise: Promise<MongoClient>;
 
-// If MONGODB_URI is not set (common in build environments), do NOT call
-// new MongoClient(uri) because the driver will attempt to read string
-// methods (like startsWith) on the uri and throw. Instead, create a
-// rejected promise so imports don't throw during module initialization —
-// the error will be raised when code actually attempts to use the DB.
 if (!uri) {
   clientPromise = Promise.reject(
     new Error('MONGODB_URI environment variable is not set')
