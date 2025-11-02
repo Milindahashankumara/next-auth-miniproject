@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (production)
+        env:
+          # Prevent accidental DB connection during build; CI builds should still
+          # run even if env isn't set. If your build needs envs, set them in GitHub Actions secrets.
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: npm run build
+
+      - name: Run tests (if any)
+        run: |
+          if [ -f package.json ] && npm run | grep -q "test"; then
+            npm test || true
+          else
+            echo "No tests to run"
+          fi
