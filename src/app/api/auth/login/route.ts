@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signJwtToken } from '@/utils/jwt';
-import clientPromise from '@/utils/mongodb';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,10 +23,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Connect to MongoDB and find user
-    const client = await clientPromise;
-    const db = client.db();
-    const user = await db.collection('users').findOne({ email, password });
+  // Lazy-load the MongoDB client to avoid touching DB-related modules during
+  // build-time data collection or other GET/time-limited operations.
+  const clientPromise = (await import('@/utils/mongodb')).default;
+  const client = await clientPromise;
+  const db = client.db();
+  const user = await db.collection('users').findOne({ email, password });
 
     if (!user) {
       return NextResponse.json(
