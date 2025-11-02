@@ -4,6 +4,14 @@ import clientPromise from '@/utils/mongodb';
 
 export const dynamic = 'force-dynamic';
 
+// Provide a safe GET handler so Next's "collecting page data" step (or any
+// accidental GETs) get a quick, deterministic response instead of running
+// the full POST logic which touches DB / JWT and can trigger surprising
+// runtime paths during build-time data collection.
+export async function GET() {
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
