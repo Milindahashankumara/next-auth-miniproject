@@ -1,10 +1,11 @@
 import { NextResponse , NextRequest } from 'next/server';
-import clientPromise from '@/utils/mongodb';
+// Lazy-load the DB helper to avoid initializing DB at module import time
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   const { email, password, isPremium, name } = await request.json();
+  const clientPromise = (await import('@/utils/mongodb')).default;
   const client = await clientPromise;
   const db = client.db();
 
